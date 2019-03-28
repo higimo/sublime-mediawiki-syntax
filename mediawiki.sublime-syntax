@@ -1,0 +1,75 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+file_extensions:
+  - ec
+scope: source.hello
+contexts:
+  main:
+    - match: '{{'
+      push: template
+    - match: '\[\['
+      push: link
+    - match: "\'\'\'\'\'"
+      push: bolditalic
+    - match: "\'\'\'"
+      push: bold
+    - match: "\'\'"
+      push: italic
+    - match: "<ref"
+      push: ref
+
+  template:
+    - meta_scope: keyword.control.c
+    - match: \\.
+      scope: keyword.control.c
+    - match: '{{'
+      push: template
+    - match: '}}'
+      pop: true
+
+  template-argument:
+    - meta_scope: constant.numeric.float.decimal.c
+    - match: '='
+      pop: true
+    - match: '}}'
+      pop: true
+
+  link:
+    - meta_scope: support.class.double.c
+    - match: \\.
+      scope: constant.character.escape.c
+    - match: '\[\['
+      push: link
+    - match: '\]\]'
+      pop: true
+
+  bold:
+    - meta_scope: markup.bold.double.c
+    - match: \\.
+      scope: constant.character.escape.c
+    - match: "\'\'\'"
+      pop: true
+
+  italic:
+    - meta_scope: markup.italic.double.c
+    - match: \\.
+      scope: constant.character.escape.c
+    - match: "\'\'"
+      pop: true
+
+  bolditalic:
+    - meta_scope: markup.bold.double.c
+    - match: \\.
+      scope: constant.character.escape.c
+    - match: "\'\'\'\'\'"
+      pop: true
+
+  ref:
+    - meta_scope: string.regexp.double.c
+    - match: '{{'
+      push: template
+    - match: \\.
+      scope: constant.character.escape.c
+    - match: "</ref>"
+      pop: true
